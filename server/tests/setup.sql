@@ -1,0 +1,1 @@
+-- Opcional: inserts específicos para tests

@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { requireAuth } from '../middlewares/auth.js';
+import { addItem, removeItem, getCart, updateQuantity, clearCart } from '../controllers/cart.controller.js';
+const r = Router();
+r.post('/add', requireAuth, addItem);
+r.put('/update', requireAuth, updateQuantity);
+r.delete('/remove/:productId', requireAuth, removeItem);
+r.delete('/clear', requireAuth, clearCart);
+r.get('/', requireAuth, getCart);
+export default r;
