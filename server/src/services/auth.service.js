@@ -26,7 +26,7 @@ export async function login({ email, password }) {
   if (!email || !password) return { error: 'Faltan credenciales', code: 400 };
 
   const { rows } = await pool.query(
-    'SELECT id, nombre AS name, apellido AS "lastName", email, password_hash, fecha_creacion AS "createdAt" FROM users WHERE email=$1',
+    'SELECT id, nombre AS name, apellido AS "lastName", email, password_hash, avatar, fecha_creacion AS "createdAt" FROM users WHERE email=$1',
     [email]
   );
   if (!rows.length) return { error: 'Credenciales inválidas', code: 401 };
@@ -44,7 +44,7 @@ export async function getProfile(userId) {
   if (!userId) return null;
   
   const { rows } = await pool.query(
-    'SELECT id, nombre AS name, apellido AS "lastName", email, fecha_creacion AS "createdAt" FROM users WHERE id=$1',
+    'SELECT id, nombre AS name, apellido AS "lastName", email, avatar, fecha_creacion AS "createdAt" FROM users WHERE id=$1',
     [userId]
   );
   return rows[0] || null;
