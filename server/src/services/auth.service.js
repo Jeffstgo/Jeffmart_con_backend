@@ -44,23 +44,23 @@ export async function getProfile(userId) {
   if (!userId) return null;
   
   const { rows } = await pool.query(
-    'SELECT id, nombre AS name, apellido AS "lastName", email, avatar, fecha_creacion AS "createdAt" FROM users WHERE id=$1',
+    'SELECT id, nombre AS name, apellido AS "lastName", email, fecha_creacion AS "createdAt" FROM users WHERE id=$1',
     [userId]
   );
   return rows[0] || null;
 }
 
-export async function updateProfile(userId, { name, lastName, avatar }) {
+export async function updateProfile(userId, { name, lastName }) {
   if (!userId) return { error: 'Usuario requerido', code: 401 };
   if (!name) return { error: 'El nombre es requerido', code: 400 };
 
   try {
     const { rows } = await pool.query(
       `UPDATE users 
-       SET nombre = $1, apellido = $2, avatar = $3 
-       WHERE id = $4 
-       RETURNING id, nombre AS name, apellido AS "lastName", email, avatar, fecha_creacion AS "createdAt"`,
-      [name, lastName || null, avatar || null, userId]
+       SET nombre = $1, apellido = $2 
+       WHERE id = $3 
+       RETURNING id, nombre AS name, apellido AS "lastName", email, fecha_creacion AS "createdAt"`,
+      [name, lastName || null, userId]
     );
 
     if (!rows.length) return { error: 'Usuario no encontrado', code: 404 };
