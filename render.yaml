@@ -1,0 +1,36 @@
+databases:
+  - name: jeffmart-db
+    databaseName: jeffmart
+    user: jeffmart_user
+
+services:
+  # Backend API
+  - type: web
+    name: jeffmart-api
+    runtime: node
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jeffmart-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://jeffmart-frontend.onrender.com
+
+  # Frontend
+  - type: web
+    name: jeffmart-frontend
+    runtime: static
+    buildCommand: cd jeffmart && npm install && npm run build
+    staticPublishPath: jeffmart/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://jeffmart-api.onrender.com/api
