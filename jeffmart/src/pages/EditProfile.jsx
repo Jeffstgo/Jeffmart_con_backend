@@ -9,8 +9,7 @@ export default function EditProfile() {
   
   const [form, setForm] = useState({
     name: "",
-    lastName: "",
-    avatar: ""
+    lastName: ""
   });
   
   const [loading, setLoading] = useState(false);
@@ -21,8 +20,7 @@ export default function EditProfile() {
     if (user) {
       setForm({
         name: user.name || "",
-        lastName: user.lastName || "",
-        avatar: user.avatar || ""
+        lastName: user.lastName || ""
       });
     }
   }, [user]);
@@ -47,8 +45,7 @@ export default function EditProfile() {
     try {
       await profileApi.updateProfile({
         name: form.name,
-        lastName: form.lastName,
-        avatar: form.avatar
+        lastName: form.lastName
       });
 
       const updatedUser = await profileApi.getProfile();
