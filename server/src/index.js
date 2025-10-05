@@ -10,14 +10,8 @@ import favoritesRoutes from './routes/favorites.routes.js';
 
 const app = express();
 
-// Configurar UTF-8 para todas las respuestas
-app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  next();
-});
-
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(',') || '*' }));
-app.use(express.json({ type: 'application/json; charset=utf-8' }));
+app.use(express.json());
 app.use(morgan('dev'));
 
 app.get('/api/health', (_req, res) => {
