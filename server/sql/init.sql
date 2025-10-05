@@ -45,10 +45,16 @@ CREATE TABLE IF NOT EXISTS user_favorites (
 
 CREATE TABLE IF NOT EXISTS cart (
   id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL REFERENCES users(id),
+  user_id INT NOT NULL REFERENCES users(id) UNIQUE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS cart_items (
+  id SERIAL PRIMARY KEY,
+  cart_id INT NOT NULL REFERENCES cart(id) ON DELETE CASCADE,
   product_id INT NOT NULL REFERENCES products(id),
-  quantity INT NOT NULL DEFAULT 1,
-  UNIQUE(user_id, product_id)
+  cantidad INT NOT NULL DEFAULT 1,
+  UNIQUE(cart_id, product_id)
 );
 
 -- Índices para optimización
@@ -57,6 +63,8 @@ CREATE INDEX IF NOT EXISTS idx_products_user ON products(user_id);
 CREATE INDEX IF NOT EXISTS idx_products_titulo ON products USING gin(titulo gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_favorites_user ON user_favorites(user_id);
 CREATE INDEX IF NOT EXISTS idx_cart_user ON cart(user_id);
+CREATE INDEX IF NOT EXISTS idx_cart_items_cart ON cart_items(cart_id);
+CREATE INDEX IF NOT EXISTS idx_cart_items_product ON cart_items(product_id);
 
 -- Datos iniciales (seed)
 INSERT INTO categories (nombre, slug) VALUES
